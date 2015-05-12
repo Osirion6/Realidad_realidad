@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+        <head>
+          <title>Lección 4</title>
+          <meta http-equiv="Content-Type"
+                content="text/html; charset=UTF-8">
+          <style>
+                body{margin: 0;}
+                canvas{width:100%; heigth:100%}
+          </style>
+        </head> 
+        <body> 
+                <script src="three.min.js"></script>
+                <script>
+			var escena = new THREE.Scene(); //Se crea la escena
+
+			var fov = 75;   //Campo de Visión en grados
+			var aspect = window.innerWidth / window.innerHeight //Relación de aspecto
+
+			var near = 0.1;
+			var far = 1000;
+
+			var camara = new THREE.PerspectiveCamera(fov,aspect,near,far);
+
+			camara.position.z = 100;
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			var figura = new THREE.Shape();
+
+			//la figura serealizan sobre el plano xy 
+			figura.moveTo(10,10);
+			figura.moveTo(70,10);
+			figura.moveTo(50,40);
+			figura.moveTo(30,40);
+			figura.moveTo(10,10);
+
+			//Para generar la malla hay que desarrollar la forma
+
+			var forma = new THREE.ExtrudeGeometry(figura,{amount:10});
+
+			var mat1= new THREE.MeshPhongMaterial({color:0x0000ff});
+			var mat2= new THREE.MeshPhongMaterial({color:0xff0000});
+			var mat3= new THREE.MeshPhongMaterial({color:0x00ff00});
+			var mat4= new THREE.MeshPhongMaterial({color:0x800008});
+			var mat5= new THREE.MeshPhongMaterial({color:0x080080});
+			var mat6= new THREE.MeshPhongMaterial({color:0x00cc00});
+
+			var material= new THREE.MeshFaceMaterial([mat1,mat2,mat3,mat4,mat5,mat6,mat6]);
+			var malla =new THREE.Mesh(forma,material);
+
+			escena.add(malla);
+
+			var luzPuntual = new THREE.PointLight(0xFFFFFF);
+
+			luzPuntual.position.x = 100;
+			luzPuntual.position.y = 100;
+			luzPuntual.position.z = 100;
+			escena.add(luzPuntual);
+
+			function render(){
+				requestAnimationFrame(render);
+				malla.rotation.x += 0.01;
+				malla.rotation.y += 0.01;
+				renderer.render(escena,camara);
+			}
+			
+			render();
+
+                </script>
+        </body>
+</html>

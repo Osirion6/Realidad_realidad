@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+ <head>
+    <title>Lección 7-3</title>
+    <meta http-equiv="Content-Type"
+                content="text/html; charset=UTF-8">
+    <style>
+      body{margin: 0;}
+      canvas{width:100%; heigth:100%}
+    </style>
+ </head> 
+ <body> 
+                <script src="three.min.js"></script>
+            <script>
+			var escena = new THREE.Scene(); //Se crea la escena
+
+			var fov = 60;   //Campo de Visión en grados
+			var aspect = window.innerWidth / window.innerHeight //Relación de aspecto
+
+			var near = 0.5;
+			var far = 1000;
+
+			var camara = new THREE.PerspectiveCamera(fov,aspect,near,far);
+
+			camara.position.z = 250;
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+			
+			//figura se establece sobre el plano zx
+			var puntos = [];								//Areeglo vacio
+			for (var i = 0; i < 50; i++) {
+				puntos.push( new THREE.Vector3( Math.sin( i * 0.2 ) * 15 + 50, 0, ( i - 5 ) * 2 ));
+			}
+
+			var forma = new THREE.LatheGeometry(puntos);  //La revolucion se realiza sobre el eje z*/
+			var malla = new THREE.Mesh(forma);
+			escena.add(malla);
+
+			function loop(){
+			requestAnimationFrame(loop);
+			malla.rotation.x += 0.01;
+			malla.rotation.y += 0.01;
+			renderer.render(escena,camara);
+			}
+			loop();
+		</script>
+	</body>
+</html>

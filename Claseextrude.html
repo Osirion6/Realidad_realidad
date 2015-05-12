@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+        <head>
+          <title>Ejemplo:Textura con superficie básica</title>
+          <meta http-equiv="Content-Type"
+                content="text/html; charset=UTF-8">
+          <style>
+                body{margin: 0;}
+                canvas{width:100%; heigth:100%}
+          </style>
+        </head> 
+        <body> 
+                <script src="js/three.min.js"></script>
+                <script>
+
+            var camara, escena, render;
+
+			var fov = 75; 
+			var aspect = window.innerWidth / window.innerHeight;
+			var near = 0.1;
+			var far = 1000;
+
+			escena = new THREE.Scene(); //Se crea la escena
+			camara = new THREE.PerspectiveCamera(fov,aspect,near,far);
+			camara.position.z = 5;
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			var textura = THREE.ImageUtils.loadTexture('texturas/paredes_piedra.jpg');
+			var material= new THREE.MeshBasicMaterial({map: textura});
+			
+			var forma=new THREE.BoxGeometry(2,2,2);
+
+			var malla=new THREE.Mesh(forma,material);
+
+			escena.add(malla);
+
+			function render(){
+				requestAnimationFrame(render);
+				malla.rotation.x += 0.01;
+				malla.rotation.y += 0.01;
+				renderer.render(escena,camara);
+			}
+			
+			render();
+
+                </script>
+        </body>
+</html>

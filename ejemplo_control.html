@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+        <head>
+          <title>Ejemplo:Textura con superficie básica</title>
+          <meta http-equiv="Content-Type"
+                content="text/html; charset=UTF-8">
+          <style>
+                body{margin: 0;}
+                canvas{width:100%; heigth:100%}
+          </style>
+        </head> 
+        <body> 
+                <script src="js/three.min.js"></script>
+                <script src="js/controls/FirstPersonControls.js"></script>
+                <script>
+
+            //Inicializacion
+            //======================
+            var camara, escena, render;
+			var fov = 75; 
+			var aspect = window.innerWidth / window.innerHeight;
+			var near = 0.1;
+			var far = 1000;
+
+			escena = new THREE.Scene(); //Se crea la escena
+			camara = new THREE.PerspectiveCamera(fov,aspect,near,far);
+			camara.position.z = 5;
+			renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			//Escena
+			//==============================
+
+			var textura = THREE.ImageUtils.loadTexture('texturas/paredes_piedra.jpg');
+			var material= new THREE.MeshBasicMaterial({map: textura});
+			var forma=new THREE.BoxGeometry(2,2,2);
+			var malla=new THREE.Mesh(forma,material);
+			escena.add(malla);
+
+			//Manejo de eventos al estilo tradicional
+			//=============================================================================================
+			//El manejo de eventos usando una llamada a una funcion *callback*
+			//o retrollamada
+			//UNa retrollamada es una funcion *f* que se da como argumento a otra
+			//funcion *g*. Cuando se llama a *g*, esta ejecuta la funcion *f*. En
+			//cada lenguaje el mecanismo es diferente; en C se usa apuntadores a 
+			//funciones, y JS se uan los simbolos.
+
+			//EventListener es el mecanismo que se usa en Js para ligar la funcion 
+			//de retrollamada.
+
+			//El tipo de evento esta dado por la operacion misma de la ventana 
+			//Cf. http://help.dottoro.om/larrqqck.php
+
+			var tipo_evento = 'resize';
+
+			//El simbolo 'listener' se asocia a la funion quq se va a retrollamar.
+			//Cuando ocurre elevento se llama a esta funcion
+
+			var listener=function(){
+				//Se actualiza la relacion de aspecto
+				camara.aspect=window.innerWidth/window.innerHeight;
+				//Se recomputa la matrix de proyeccion
+				camara.updateProjectionMatrix();
+				//
+				renderer.setSize(window.innerWidth,window.innerHeight);
+			}
+
+			var capturarp=false;
+
+			window.addEventListener(tipo_evento,listener,capturarp);
+
+			//***********************************************************
+		/*	document.onkeydown =teclado;
+
+			function teclado(evento){
+				evento= evento|| window.event;
+				var paso=0.1;
+				if (evento.keyCode == '38'){		//flecha arriba
+					camara.position.y += paso;
+				}
+				if (evento.keyCode == '40'){		//flecha abajo
+					camara.position.y += -paso;
+				}
+				if (evento.keyCode == '87'){		//W avanza
+					camara.position.z +=paso;
+				}
+				if (evento.keyCode == '83'){		//S regresa
+					camara.position.z += -paso;
+				}
+				if (evento.keyCode == '65'){		//A izquierda
+					camara.position.x +=paso;
+				}
+				if (evento.keyCode == '68'){		//D derecha
+					camara.position.x += -paso;
+				}
+			}*/
+			var reloj = new THREE.Clock();
+			var controles = new THREE.FirstPersonControls(camara);
+			controles.movementSpeed = 3;
+			controles.lookSpeed =0.05;
+			controles.lookVertical = false;
+
+			function render(){
+				renderer.render(escena,camara);
+				controles.update(reloj.getDelta());
+				requestAnimationFrame(render);
+			}
+			
+			render();
+
+                </script>
+        </body>
+</html>

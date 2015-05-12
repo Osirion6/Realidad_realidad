@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+        <head>
+          <title>Lección 4</title>
+          <meta http-equiv="Content-Type"
+                content="text/html; charset=UTF-8">
+          <style>
+                body{margin: 0;}
+                canvas{width:100%; heigth:100%}
+          </style>
+        </head> 
+        <body> 
+                <script src="three.min.js"></script>
+                <script>
+			var escena = new THREE.Scene(); //Se crea la escena
+
+			var fov = 60;   //Campo de Visión en grados
+			var aspect = window.innerWidth / window.innerHeight //Relación de aspecto
+
+			var near = 0.5;
+			var far = 1000;
+
+			var camara = new THREE.PerspectiveCamera(fov,aspect,near,far);
+
+			camara.position.z = 100;
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+
+			var forma=new THREE.BoxGeometry(1,1,4);
+			var material= new THREE.MeshNormalMaterial();
+			var cubo=new THREE.Mesh(forma,material);
+
+			escena.add(cubo);
+
+			function render(){
+				requestAnimationFrame(render);
+				cubo.rotation.x += 0.01;
+				cubo.rotation.y += 0.01;
+				renderer.render(escena,camara);
+			}
+			
+			render();
+
+                </script>
+        </body>
+</html>
